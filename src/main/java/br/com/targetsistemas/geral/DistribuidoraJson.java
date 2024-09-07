@@ -1,4 +1,4 @@
-package br.com.targetsistemas.distribuidorajson;
+package br.com.targetsistemas.geral;
 
 public class DistribuidoraJson {
 

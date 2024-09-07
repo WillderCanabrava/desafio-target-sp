@@ -1,38 +1,77 @@
 package br.com.targetsistemas.distribuidorateste;
 
-import br.com.targetsistemas.distribuidorajson.DistribuidoraJson;
+import br.com.targetsistemas.geral.DistribuidoraJson;
 import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 public class DistribuidoraTeste {
 
     public static void main(String[] args) {
         Gson gson = new Gson();
 
-        String caminhoDoArquivo = "C:\\Users\\Samsung\\OneDrive\\Área de Trabalho\\desafio_target\\dados.json";
 
-        try (FileReader reader = new FileReader(caminhoDoArquivo)) {
+        try {
+            // Lê o arquivo JSON e desserializa para uma lista da classe DistribuidoraJson
+            Type listType = new TypeToken<List<DistribuidoraJson>>() {
+            }.getType();
+            List<DistribuidoraJson> valores;
+            valores = gson.fromJson(new FileReader("dados.json"), listType);
 
-            Type tipoListaDias = new TypeToken<List<DistribuidoraJson>>() {}.getType();
+            //Exclui os dias com faturamento R$ 0.00 da lista
+            List<DistribuidoraJson> valoresValidos = valores.stream()
+                    .filter(d -> d.getValor() > 0)
+                    .toList();
 
-            List<DistribuidoraJson> dias = gson.fromJson(reader, tipoListaDias);
+            // Dia com maior faturamento
+            Optional<DistribuidoraJson> maxFaturamento = valoresValidos.stream()
+                    .max(Comparator.comparingDouble(DistribuidoraJson::getValor));
 
-            for (DistribuidoraJson dia : dias) {
-                System.out.println("Dia 1: " + dia.getDia());
-                System.out.println("Valor dia 1: " + dia.getValor());
+            // Dia com o menor faturamento
+            Optional<DistribuidoraJson> minFaturamento = valoresValidos.stream()
+                    .min(Comparator.comparingDouble(DistribuidoraJson::getValor));
+
+
+            maxFaturamento.ifPresent(d ->
+                    System.out.println("Dia com maior faturamento: dia " + d.getDia() + ", com faturamento de R$ " + d.getValor())
+            );
+
+            minFaturamento.ifPresent(d ->
+                    System.out.println("Dia com menor faturamento: dia " + d.getDia() + ", com faturamento de R$ " + d.getValor())
+            );
+
+            double media = valores.stream()
+                    .map(DistribuidoraJson::getValor)
+                    .filter(faturamento -> faturamento > 0)
+                    .mapToDouble(Double::doubleValue)
+                    .average()
+                    .orElse(Double.NaN);
+
+            // Verifica quantos dias do mês obtiveram faturamento maior que a média mensal
+            long diasAcimaDaMedia = valoresValidos.stream()
+                    .filter(d -> d.getValor() > media)
+                    .count();
+
+
+            if (!Double.isNaN(media)) {
+                System.out.println("Média de faturamento por dia: R$ " + media);
+                System.out.println("Número de dias com faturamento maior que a média: " + diasAcimaDaMedia);
+            } else {
+                System.out.println("Não há valores válidos para calcular a média.");
             }
-        } catch (JsonSyntaxException e) {
-            System.err.println("Erro de sintaxe do JSON: " + e.getMessage());
+
+
         } catch (IOException e) {
-            System.err.println("Erro ao ler o arquivo JSON: " + e.getMessage());
-            }
+            e.printStackTrace();
         }
-
     }
+}
+
+
 
