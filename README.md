@@ -4,7 +4,7 @@
 ### 1. Distribuidora utilizando um arquivo JSON:
 ####   - Este exercício está dividido em duas classes: a **DistribuidoraJson**, que representa o arquivo JSON em formato de código Java, e a **DistribuidoraTeste**, com a implementação do código para a realização do proposto pelo enunciado, utilizando - se da DistribuidoraJson.
 ####   - Foi utilizado o gerenciador de dependências Maven para adicionar a biblioteca Gson ao projeto para efetuar a desserialização e leitura do arquivo JSON.
-####   - Conceitos e recursos do Java utilizados: lista, interface Map, Stream, classe Optional dentre outros.
+####   - Conceitos e recursos do Java utilizados: lista, interface Map, Stream, classe Optional, dentre outros.
 
 ### 2. Sequência de Fibonacci:
 ####   - O conceito utilizado nesse exercício é o de laço de repetição, tanto "while", como "for."
