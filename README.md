@@ -16,4 +16,4 @@
 ####   - Este exercício se trata apenas de escrever em formato de código Java um texto que estava escrito em formato de texto comum no enunciado.
 
 ### 5. Distribuidora:
-#####   - Exercício para verificarmos o percentual de faturamento de cada Estado em relação ao faturamento atual. Foram utilizados conceitos básicos de matemática.
+####   - Exercício para verificarmos o percentual de faturamento de cada Estado em relação ao faturamento atual. Foram utilizados conceitos básicos de matemática.
